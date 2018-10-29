@@ -34,8 +34,8 @@ function runSearch() {
     logProducts(results);
 
     prompt(questions).then(function (answers) {
-      // var answer = JSON.stringify(answers, null, '');
-      // console.log(answer);
+       //var answers = JSON.stringify(answers, null, '');
+       console.log(answers);
       console.log("You selected item: " + answers.item_id);
 
 
