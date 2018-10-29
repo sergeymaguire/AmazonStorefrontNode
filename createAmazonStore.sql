@@ -1,5 +1,17 @@
+DROP DATABASE IF EXISTS amazon_store;
+CREATE DATABASE amazon_store;
+
 
 USE amazon_store;
+
+CREATE TABLE products (
+  item_id VARCHAR(30) NOT NULL,
+  product_name VARCHAR(250) NOT NULL,
+  department_name VARCHAR(100) NULL,  
+  price DECIMAL(10,2) NOT NULL,
+  stock_quantity INTEGER(10) NULL,
+  PRIMARY KEY (item_id)
+);
 
 INSERT INTO products (item_id, product_name, department_name, price, stock_quantity)
 VALUES("TCL 32S305", "32-Inch 720p Roku Smart LED TV", "Electronics", 169.99, 10),

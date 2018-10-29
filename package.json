@@ -1,0 +1,25 @@
+{
+  "name": "AmazonStorefrontNode",
+  "version": "1.0.0",
+  "description": "A node amazon store where users can buy products",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sergeymaguire/AmazonStorefrontNode.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sergeymaguire/AmazonStorefrontNode/issues"
+  },
+  "homepage": "https://github.com/sergeymaguire/AmazonStorefrontNode#readme",
+  "dependencies": {
+    "colors": "^1.3.2",
+    "inquirer": "^6.2.0",
+    "mysql": "^2.16.0"
+  }
+}
