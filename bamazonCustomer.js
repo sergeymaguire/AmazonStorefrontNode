@@ -52,7 +52,7 @@ function logProducts(results) {
   }
   for (var i = 0; i < results.length; i++) {
     //console.log(results);
-    console.log('\x1b[36m%s\x1b[0m', "________________________________________________" + "\n");
+   // console.log('\x1b[36m%s\x1b[0m', "________________________________________________" + "\n");
     console.log("Item ID: ".red + results[i].item_id + "  Price: ".red + results[i].price +
       "  Product Name: ".red + results[i].product_name);
     console.log('\x1b[36m%s\x1b[0m', "________________________________________________" + "\n"); 
