@@ -1,13 +1,15 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var colors = require("colors");
+var table = require("cli-table");
+var wordwrap = require("wordwrap");
 var products = [];
 var prompt = inquirer.createPromptModule();
 
 var questions = [
   {
     type: 'input',
-    name: 'item_id',
+    name: 'item_index',
     message: "Please select the item number you wish to buy(1-10)",
     validate: function(value) {
       var pass = value.match(
@@ -22,7 +24,7 @@ var questions = [
   },
   {
     type: 'input',
-    name: 'stock_quantity',
+    name: 'order_quantity',
     message: "Select the quantity of the item you would like to buy",
     validate: function(value) {
       var pass = value.match(
@@ -32,7 +34,7 @@ var questions = [
         return true;
       }
 
-      return 'Please enter a number between 1-10';
+      return 'Please enter a number';
     }
   }];
 var connection = mysql.createConnection({
@@ -67,12 +69,34 @@ function processResults(results) {
 
 function promptForItemNo() {
     prompt(questions).then(function (answers) {
+      console.log("promptForItemNo ");
       console.log(answers);
-      var i = parseInt(answers.item_id) - 1;
+      var i = parseInt(answers.item_index) - 1;
       console.log(i);
+      var qty = parseInt(answers.order_quantity);
+      console.log("quantity " + qty);
       console.log(products[i]);
+      updateQuantity(products[i].item_id, qty)
     });
 }
+
+function updateQuantity(item_id, qty) {
+  console.log("updateQuantity.qty " + qty);
+  console.log("updateQuantity.item_id " + item_id);
+  //UPDATE amazon_store.products SET stock_quantity = "5" WHERE (item_id = "HAN 3PCCW");
+  //UPDATE `amazon_store`.`products` SET stock_quantity= stock_quantity - '1' WHERE (`item_id` = 'HAN 3PCCW');
+
+  var sql = 'UPDATE amazon_store.products SET stock_quantity = stock_quantity - ' + '"' + qty + '"' + ' WHERE (item_id = ' + '"'  + item_id + '")';
+  console.log("sql= " + sql);
+  connection.query(sql, function (err, results) {
+    if (err) throw err;
+
+    console.log("update successful");
+    //searchCallback(results);
+  });
+}
+
+
 
 function logProducts(results) {
   if (!results || !results.length) {
@@ -97,5 +121,14 @@ function logOneProducts(itemNo) {
     console.log("Price: ".red + results[0].price);
     console.log("Product Name: ".red + results[0].product_name);
     console.log("Quantity: ".red + results[0].stock_quantity);
+    console.log("")
   });
 }
+
+/*
+     ("`-''-/").___..--''"`-._
+     `6_ 6  )   `-.  (     ).`-.__.`)
+     (_Y_.)'  ._   )  `._ `. ``-..-'
+   _..`--'_..-_/  /--'_.' ,' 
+  (il),-''  (li),'  ((!.-'    
+*/

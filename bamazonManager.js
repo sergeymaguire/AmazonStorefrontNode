@@ -1,6 +1,8 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var colors = require("colors");
+var table = require("cli-table");
+var wordwrap = require("wordwrap");
 var prompt = inquirer.createPromptModule();
 
 var questions = [{
