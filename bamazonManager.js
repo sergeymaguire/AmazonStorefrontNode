@@ -98,7 +98,5 @@ function exitManagerView () {
     process.exit(1);
 };
 
-
-
 console.log("\n" + " Press CTRL C to quit anytime...".america + "\n");
 chooseMenu();
