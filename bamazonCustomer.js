@@ -115,8 +115,6 @@ function logProducts(results) {
 function logOneProducts(itemNo) {
   connection.query("SELECT * FROM products WHERE item_id = '" + itemNo + "'", function (err, results) {
     if (err) throw err;
-
-    //console.log(results);
   
     console.log("Item ID: ".red + itemNo[0].item_id);
     console.log("Department: ".red + itemNo[0].department_name);
