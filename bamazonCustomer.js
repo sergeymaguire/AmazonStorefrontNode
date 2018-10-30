@@ -87,11 +87,12 @@ function updateQuantity(item_id, qty) {
   //UPDATE `amazon_store`.`products` SET stock_quantity= stock_quantity - '1' WHERE (`item_id` = 'HAN 3PCCW');
 
   var sql = 'UPDATE amazon_store.products SET stock_quantity = stock_quantity - ' + '"' + qty + '"' + ' WHERE (item_id = ' + '"'  + item_id + '")';
+
   console.log("sql= " + sql);
   connection.query(sql, function (err, results) {
     if (err) throw err;
-
     console.log("update successful");
+    process.exit();
     //searchCallback(results);
   });
 }
@@ -122,7 +123,6 @@ function logOneProducts(itemNo) {
     console.log("Price: ".red + results[0].price);
     console.log("Product Name: ".red + results[0].product_name);
     console.log("Quantity: ".red + results[0].stock_quantity);
-    process.exit(1);
   });
 }
 
