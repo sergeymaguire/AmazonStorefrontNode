@@ -4,13 +4,6 @@ var colors = require("colors");
 var table = require("cli-table");
 var wordwrap = require("wordwrap");
 var prompt = inquirer.createPromptModule();
-
-// var questions = [{
-//     type: 'input',
-//     name: 'item_id',
-//     message: "Please enter an item number"
-// }];
-
 var connection = mysql.createConnection({
     host: "localhost",
 
@@ -21,8 +14,6 @@ var connection = mysql.createConnection({
     password: "1525wilma",
     database: "amazon_store"
 });
-
-
 
 function connectAndSearch() {
     connection.connect(function (err) {
@@ -69,7 +60,6 @@ function chooseMenu() {
             ]
         })
         .then(function (answers) {
-            console.log("After then");
             switch (answers.menu) {
                 case "View Products for Sale":
                     connectAndSearch();
@@ -80,13 +70,15 @@ function chooseMenu() {
                     break;
 
                 case "Add to Inventory":
+                addToInventory();
                     break;
 
                 case "Add New Product":
+                addNewProduct();
                     break;
 
                 case "Exit Manager View":
-                    process.exit(1);
+                exitManagerView();
                     break;
 
             };
@@ -94,6 +86,9 @@ function chooseMenu() {
         });
 };
 
+function exitManagerView () {
+    process.exit(1);
+};
 
 
 
