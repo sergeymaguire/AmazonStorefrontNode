@@ -5,11 +5,11 @@ var table = require("cli-table");
 var wordwrap = require("wordwrap");
 var prompt = inquirer.createPromptModule();
 
-var questions = [{
-    type: 'input',
-    name: 'item_id',
-    message: "Please enter an item number"
-}];
+// var questions = [{
+//     type: 'input',
+//     name: 'item_id',
+//     message: "Please enter an item number"
+// }];
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -22,26 +22,23 @@ var connection = mysql.createConnection({
     database: "amazon_store"
 });
 
-chooseMenu();
+
 
 function connectAndSearch() {
     connection.connect(function (err) {
         if (err) throw err;
-        runSearch(processResults);
+
+        connection.query("SELECT * FROM products", function (err, results) {
+            if (err) throw err;
+    
+            logProducts(results);
+        });
     });
     
 }
 
-function runSearch(searchCallback) {
-    connection.query("SELECT * FROM products", function (err, results) {
-        if (err) throw err;
-
-        searchCallback(results);
-    });
-}
-
-function processResults(results) {
-    logProducts(results);
+function viewLowInventory (processResults){
+    console.log(processResults);
 }
 
 function logProducts(results) {
@@ -56,21 +53,8 @@ function logProducts(results) {
     }
 }
 
-function logOneProducts(itemNo) {
-    connection.query("SELECT * FROM products WHERE item_id = '" + itemNo + "'", function (err, results) {
-        if (err) throw err;
-
-        console.log(results);
-        console.log('\x1b[36m%s\x1b[0m', "WELCOME TO THE AMAZON STOREFRONT" + "\n");
-        console.log("Item ID: ".red + itemNo[0].item_id);
-        console.log("Department: ".red + itemNo[0].department_name);
-        console.log("Price: ".red + results[0].price);
-        console.log("Product Name: ".red + results[0].product_name);
-        console.log("Quantity: ".red + results[0].stock_quantity);
-    });
-}
-
 function chooseMenu() {
+    console.log("chooseMenu");
     inquirer
         .prompt({
             name: "menu",
@@ -85,13 +69,14 @@ function chooseMenu() {
             ]
         })
         .then(function (answers) {
+            console.log("After then");
             switch (answers.menu) {
                 case "View Products for Sale":
                     connectAndSearch();
                     break;
-                    
 
                 case "View Low Inventory":
+                viewLowInventory();
                     break;
 
                 case "Add to Inventory":
@@ -108,4 +93,9 @@ function chooseMenu() {
           
         });
 };
+
+
+
+
 console.log("\n" + " Press CTRL C to quit anytime...".america + "\n");
+chooseMenu();

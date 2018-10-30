@@ -91,14 +91,14 @@ function updateQuantity(item_id, qty) {
   console.log("sql= " + sql);
   connection.query(sql, function (err, results) {
     if (err) throw err;
-    console.log("update successful");
+    //console.log("update successful");
     process.exit();
     //searchCallback(results);
   });
 }
 
 
-
+console.log("\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+ "\n" + "----------------------"+"WELCOME TO THE AMAZON STORE".bgCyan + "----------------------" + "\n" );
 function logProducts(results) {
   if (!results || !results.length) {
     console.log("No products...");
@@ -117,7 +117,7 @@ function logOneProducts(itemNo) {
     if (err) throw err;
 
     //console.log(results);
-    console.log('\x1b[36m%s\x1b[0m', "WELCOME TO THE AMAZON STOREFRONT" + "\n");
+  
     console.log("Item ID: ".red + itemNo[0].item_id);
     console.log("Department: ".red + itemNo[0].department_name);
     console.log("Price: ".red + results[0].price);
@@ -126,10 +126,3 @@ function logOneProducts(itemNo) {
   });
 }
 
-/*
-     ("`-''-/").___..--''"`-._
-     `6_ 6  )   `-.  (     ).`-.__.`)
-     (_Y_.)'  ._   )  `._ `. ``-..-'
-   _..`--'_..-_/  /--'_.' ,' 
-  (il),-''  (li),'  ((!.-'    
-*/
