@@ -104,8 +104,9 @@ function logProducts(results) {
     return;
   }
   for (var i = 0; i < results.length; i++) {
+    console.log("\n");
     console.log(i + 1 + ". Item ID: ".red + results[i].item_id + "  Price: ".red + results[i].price +
-      "  Product Name: ".red + results[i].product_name);
+      "  Product Name: ".red + results[i].product_name + " Quantity: ".red + results[i].stock_quantity);
     console.log('\x1b[36m%s\x1b[0m', "________________________________________________" + "\n");
   }
 }
@@ -121,7 +122,7 @@ function logOneProducts(itemNo) {
     console.log("Price: ".red + results[0].price);
     console.log("Product Name: ".red + results[0].product_name);
     console.log("Quantity: ".red + results[0].stock_quantity);
-    console.log("")
+    process.exit(1);
   });
 }
 
