@@ -3,14 +3,38 @@ var inquirer = require("inquirer");
 var colors = require("colors");
 var products = [];
 var prompt = inquirer.createPromptModule();
-//var keys = require("./bamazonManager.js");
 
-var questions = [{
-  type: 'input',
-  name: 'item_id',
-  message: "Please enter an item number"
-}];
+var questions = [
+  {
+    type: 'input',
+    name: 'item_id',
+    message: "Please select the item number you wish to buy(1-10)",
+    validate: function(value) {
+      var pass = value.match(
+        /^\d+$/
+      );
+      if (pass && pass > 0 && pass <= products.length) {
+        return true;
+      }
 
+      return 'Please enter a number between 1-10';
+    }
+  },
+  {
+    type: 'input',
+    name: 'stock_quantity',
+    message: "Select the quantity of the item you would like to buy",
+    validate: function(value) {
+      var pass = value.match(
+        /^\d+$/
+      );
+      if (pass && pass > 0 && pass) {
+        return true;
+      }
+
+      return 'Please enter a number between 1-10';
+    }
+  }];
 var connection = mysql.createConnection({
   host: "localhost",
 
@@ -21,7 +45,6 @@ var connection = mysql.createConnection({
   password: "1525wilma",
   database: "amazon_store"
 });
-// console.log (logOneProducts("TCL 32S305"));
 
 connection.connect(function (err) {
   if (err) throw err;
@@ -29,7 +52,6 @@ connection.connect(function (err) {
 });
 
 function runSearch(searchCallback) {
-  // query the database for all items being auctioned
   connection.query("SELECT * FROM products", function (err, results) {
     if (err) throw err;
 
@@ -43,16 +65,12 @@ function processResults(results) {
     promptForItemNo();
 }
 
-///for testing
-// runSearch(processResults);
-////////////////////remove after when done.
 function promptForItemNo() {
     prompt(questions).then(function (answers) {
       console.log(answers);
-      var i = parseInt(answers.item_id);
+      var i = parseInt(answers.item_id) - 1;
       console.log(i);
       console.log(products[i]);
-      //console.log("You selected item: " + products[i].item_id);
     });
 }
 
@@ -62,7 +80,7 @@ function logProducts(results) {
     return;
   }
   for (var i = 0; i < results.length; i++) {
-    console.log(i + ". Item ID: ".red + results[i].item_id + "  Price: ".red + results[i].price +
+    console.log(i + 1 + ". Item ID: ".red + results[i].item_id + "  Price: ".red + results[i].price +
       "  Product Name: ".red + results[i].product_name);
     console.log('\x1b[36m%s\x1b[0m', "________________________________________________" + "\n");
   }
