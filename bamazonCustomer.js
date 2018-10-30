@@ -91,9 +91,7 @@ function updateQuantity(item_id, qty) {
   console.log("sql= " + sql);
   connection.query(sql, function (err, results) {
     if (err) throw err;
-    //console.log("update successful");
     process.exit();
-    //searchCallback(results);
   });
 }
 
