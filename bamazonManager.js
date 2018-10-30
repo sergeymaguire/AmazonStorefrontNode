@@ -28,8 +28,16 @@ function connectAndSearch() {
     
 }
 
-function viewLowInventory (processResults){
-    console.log(processResults);
+function viewLowInventory() {
+    console.log("Items that are low");
+};
+
+function addToInventory() {
+    console.log("add new inventory here!")
+}
+
+function addNewProduct() {
+    console.log("add new product!")
 }
 
 function logProducts(results) {
