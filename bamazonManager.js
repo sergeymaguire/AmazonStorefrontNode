@@ -60,9 +60,7 @@ function addToInventory(item_id, qty) {
     });
 }
 
-function addNewProduct() {
-    console.log("add new product!")
-}
+
 
 function logProducts(results) {
     if (!results || !results.length) {
@@ -122,7 +120,7 @@ function chooseMenu() {
                     break;
 
                 case "Add New Product":
-                    addNewProduct();
+                promptForNewItem();
                     break;
 
                 case "Exit Manager View":
@@ -142,6 +140,97 @@ console.log("\n" + " Press CTRL C to quit anytime...".america + "\n");
 chooseMenu();
 
 
+
+function promptForNewItem() {
+    console.log("promptAddToStockQty");
+    var questions = [{
+            type: "input",
+            name: "item_ID",
+            message: "Please enter the item ID",
+            validate: function (value) {
+                if (value && value.length) {
+                    return true;
+                }
+
+                return "Please enter an Item ID";
+            }
+        },
+        {
+            type: "input",
+            name: "product_name",
+            message: "Please enter the product name",
+            validate: function (value) {
+                if (value && value.length) {
+                    return true;
+                }
+
+                return "Please enter the product name";
+            }
+        },
+        {
+            type: "input",
+            name: "department",
+            message: "Please enter the department name",
+            validate: function (value) {
+                if (value && value.length) {
+                    return true;
+                }
+
+                return "Please enter the deparment name";
+            }
+        },
+       {
+        type: "input",
+        name: "price",
+        message: "Please enter the price for this item",
+        validate: function (value) {
+
+            price = parseFloat(value).toFixed(2);
+
+            if (!price) return "Please enter a number";
+
+            if (price <= 0) {
+                return "please enter a quantity greater than 0";
+            }
+
+            return true;
+        }
+    },
+        {
+            type: "input",
+            name: "stock_quantity",
+            message: "Enter the quantity",
+            validate: function (value) {
+
+                stockQty = parseInt(value);
+
+                if (!stockQty) return "Please enter a number";
+
+                if (stockQty <= 0) {
+                    return "please enter a quantity greater than 0";
+                }
+
+                return true;
+            }
+        }
+    ];
+    prompt(questions).then(function (answers) {
+        console.log( "item_id " + answers.item_ID);
+        console.log( "product_name " + answers.product_name);
+        console.log( "department " + answers.department);
+        console.log( "stock_quantity " + answers.stock_quantity);
+        console.log( "price " + answers.price);
+        insertNewItem(answers);
+        //console.log("promptForItemNo ");
+        //console.log(answers);
+        //var i = parseInt(answers.item_index) - 1;
+        //console.log(i);
+        //var qty = parseInt(answers.order_quantity);
+        //console.log("quantity " + qty);
+        //console.log(products[i]);
+        //addToInventory(products[i].item_id, qty);
+    });
+}
 
 function promptAddToStockQty() {
     console.log("promptAddToStockQty");
@@ -193,4 +282,19 @@ function promptAddToStockQty() {
         //console.log(products[i]);
         addToInventory(products[i].item_id, qty);
     });
+}
+
+function insertNewItem (answers) {
+var insertSql = "INSERT INTO amazon_store.products (item_id, product_name, department_name, price, stock_quantity) VALUES (";
+insertSql = insertSql +  "'" + answers.item_ID + "',";
+insertSql = insertSql +  "'" + answers.product_name + "',";
+insertSql = insertSql +  "'" + answers.department + "',";
+insertSql = insertSql +  "'" + answers.price + "',";
+insertSql = insertSql +  "'" + answers.stock_quantity + "')";
+console.log(insertSql);
+connection.query(insertSql, function (err, results) {
+    if (err) throw err;
+    process.exit();
+});
+//INSERT INTO amazon_store.products (item_id, product_name, department_name, price, stock_quantity) VALUES ('HMMER-582e', 'A hammer2', 'tools', '25.99', '42');
 }
