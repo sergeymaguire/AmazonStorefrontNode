@@ -92,14 +92,14 @@ function promptForItemNo() {
 }
 
 function updateQuantity(item_id, qty) {
-  console.log("updateQuantity.qty " + qty);
-  console.log("updateQuantity.item_id " + item_id);
+  // console.log("updateQuantity.qty " + qty);
+  // console.log("updateQuantity.item_id " + item_id);
   //UPDATE amazon_store.products SET stock_quantity = "5" WHERE (item_id = "HAN 3PCCW");
   //UPDATE `amazon_store`.`products` SET stock_quantity= stock_quantity - '1' WHERE (`item_id` = 'HAN 3PCCW');
 
   var sql = 'UPDATE amazon_store.products SET stock_quantity = stock_quantity - ' + '"' + qty + '"' + ' WHERE (item_id = ' + '"' + item_id + '")';
 
-  console.log("sql= " + sql);
+  //console.log("sql= " + sql);
   connection.query(sql, function (err, results) {
     if (err) throw err;
     process.exit();
