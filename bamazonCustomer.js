@@ -32,9 +32,9 @@ var questions = [{
         /^\d+$/
       ); 
       var qtyNum = parseInt(value);
-      console.log(" Validate order quantity " + qtyNum);
-      console.log(currentItemNo);
-      console.log(products[currentItemNo].stock_quantity);
+      //console.log(" Validate order quantity " + qtyNum);
+      //console.log(currentItemNo);
+      //console.log(products[currentItemNo].stock_quantity);
       if (qtyNum > 0 ) {
         var onHand = products[currentItemNo].stock_quantity - qtyNum;
         if (qtyNum < onHand || onHand <= 0)
@@ -80,15 +80,19 @@ function processResults(results) {
 
 function promptForItemNo() {
   prompt(questions).then(function (answers) {
-    console.log("promptForItemNo ");
-    console.log(answers);
+    //console.log("promptForItemNo ");
+    //console.log(answers);
     var i = parseInt(answers.item_index) - 1;
-    console.log(i);
+    //console.log(i);
     var qty = parseInt(answers.order_quantity);
-    console.log("quantity " + qty);
-    console.log(products[i]);
-    updateQuantity(products[i].item_id, qty)
+    //console.log("quantity " + qty);
+    //console.log(products[i]);
+    updateQuantity(products[i].item_id, qty);
+    displayPrice(products[i], qty);
   });
+}
+function displayPrice (product, qty) {
+  console.log("Your total cost: " + product.price * qty);
 }
 
 function updateQuantity(item_id, qty) {
@@ -115,7 +119,7 @@ function logProducts(results) {
     return;
   }
   for (var i = 0; i < results.length; i++) {
-    console.log("\n");
+    //console.log("\n");
     console.log(i + 1 + ". Item ID: ".red + results[i].item_id + "  Price: ".red + results[i].price +
       "  Product Name: ".red + results[i].product_name + " Quantity: ".red + results[i].stock_quantity);
     console.log('\x1b[36m%s\x1b[0m', "________________________________________________" + "\n");
