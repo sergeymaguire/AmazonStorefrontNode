@@ -7,44 +7,44 @@ var products = [];
 var prompt = inquirer.createPromptModule();
 var currentItemNo = undefined;
 
-var questions = [{
-    type: 'input',
-    name: 'item_index',
+var questions = [
+  {
+    type: "input",
+    name: "item_index",
     message: "Please select the item number you wish to buy(1-10)",
-    validate: function (value) {
-      var pass = value.match(
-        /^\d+$/
-      );
+    validate: function(value) {
+      var pass = value.match(/^\d+$/);
       if (pass && pass > 0 && pass <= products.length) {
         currentItemNo = value - 1; //store this to be used in verification of quantity...
         return true;
       }
 
-      return 'Please enter a number between 1-10';
+      return "Please enter a number between 1-10";
     }
   },
   {
-    type: 'input',
-    name: 'order_quantity',
+    type: "input",
+    name: "order_quantity",
     message: "Select the quantity of the item you would like to buy",
-    validate: function (value) {
-      var orderQty = value.match(
-        /^\d+$/
-      ); 
-      var qtyNum = parseInt(value);
-      //console.log(" Validate order quantity " + qtyNum);
-      //console.log(currentItemNo);
-      //console.log(products[currentItemNo].stock_quantity);
-      if (qtyNum > 0 ) {
-        var onHand = products[currentItemNo].stock_quantity - qtyNum;
-        if (qtyNum < onHand || onHand <= 0)
-          return true;
-        else {
-          return "We only have this much left " + products[currentItemNo].stock_quantity;
-        }
-      }
+    validate: function(value) {
+      // var orderQty = value.match(/^\d{1,2}$/).toString();
+      orderQty = parseInt(value);
 
-      return 'Please enter a number';
+      if (!orderQty) return "Please enter a number";
+      
+      //console.log("\n" + "orderQty " + orderQty);
+      // console.log("\n" + "Validate order quantity " + orderQty);
+      // console.log("currentItemNo " + currentItemNo);
+      // console.log("stock_quantity " + products[currentItemNo].stock_quantity);
+      if (orderQty <= 0) {
+        return "please enter a quantity greater than 0";
+      }
+      var onHand = products[currentItemNo].stock_quantity - orderQty;
+      console.log("onHand " + onHand);
+      if (onHand >= 0) return true;
+
+      return "We only have this much left " + products[currentItemNo].stock_quantity;
+      
     }
   }
 ];
@@ -59,13 +59,13 @@ var connection = mysql.createConnection({
   database: "amazon_store"
 });
 
-connection.connect(function (err) {
+connection.connect(function(err) {
   if (err) throw err;
   runSearch(processResults);
 });
 
 function runSearch(searchCallback) {
-  connection.query("SELECT * FROM products", function (err, results) {
+  connection.query("SELECT * FROM products", function(err, results) {
     if (err) throw err;
 
     searchCallback(results);
@@ -79,7 +79,7 @@ function processResults(results) {
 }
 
 function promptForItemNo() {
-  prompt(questions).then(function (answers) {
+  prompt(questions).then(function(answers) {
     //console.log("promptForItemNo ");
     //console.log(answers);
     var i = parseInt(answers.item_index) - 1;
@@ -91,7 +91,7 @@ function promptForItemNo() {
     displayPrice(products[i], qty);
   });
 }
-function displayPrice (product, qty) {
+function displayPrice(product, qty) {
   console.log("Your total cost: " + product.price * qty);
 }
 
@@ -101,17 +101,40 @@ function updateQuantity(item_id, qty) {
   //UPDATE amazon_store.products SET stock_quantity = "5" WHERE (item_id = "HAN 3PCCW");
   //UPDATE `amazon_store`.`products` SET stock_quantity= stock_quantity - '1' WHERE (`item_id` = 'HAN 3PCCW');
 
-  var sql = 'UPDATE amazon_store.products SET stock_quantity = stock_quantity - ' + '"' + qty + '"' + ' WHERE (item_id = ' + '"' + item_id + '")';
+  var sql =
+    "UPDATE amazon_store.products SET stock_quantity = stock_quantity - " +
+    '"' +
+    qty +
+    '"' +
+    " WHERE (item_id = " +
+    '"' +
+    item_id +
+    '")';
 
   //console.log("sql= " + sql);
-  connection.query(sql, function (err, results) {
+  connection.query(sql, function(err, results) {
     if (err) throw err;
     process.exit();
   });
 }
 
-
-console.log("\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "----------------------" + "WELCOME TO THE AMAZON STORE".bgCyan + "----------------------" + "\n");
+console.log(
+  "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "----------------------" +
+    "WELCOME TO THE AMAZON STORE".bgCyan +
+    "----------------------" +
+    "\n"
+);
 
 function logProducts(results) {
   if (!results || !results.length) {
@@ -120,20 +143,36 @@ function logProducts(results) {
   }
   for (var i = 0; i < results.length; i++) {
     //console.log("\n");
-    console.log(i + 1 + ". Item ID: ".red + results[i].item_id + "  Price: ".red + results[i].price +
-      "  Product Name: ".red + results[i].product_name + " Quantity: ".red + results[i].stock_quantity);
-    console.log('\x1b[36m%s\x1b[0m', "________________________________________________" + "\n");
+    console.log(
+      i +
+        1 +
+        ". Item ID: ".red +
+        results[i].item_id +
+        "  Price: ".red +
+        results[i].price +
+        "  Product Name: ".red +
+        results[i].product_name +
+        " Quantity: ".red +
+        results[i].stock_quantity
+    );
+    console.log(
+      "\x1b[36m%s\x1b[0m",
+      "________________________________________________" + "\n"
+    );
   }
 }
 
 function logOneProducts(itemNo) {
-  connection.query("SELECT * FROM products WHERE item_id = '" + itemNo + "'", function (err, results) {
-    if (err) throw err;
+  connection.query(
+    "SELECT * FROM products WHERE item_id = '" + itemNo + "'",
+    function(err, results) {
+      if (err) throw err;
 
-    console.log("Item ID: ".red + itemNo[0].item_id);
-    console.log("Department: ".red + itemNo[0].department_name);
-    console.log("Price: ".red + results[0].price);
-    console.log("Product Name: ".red + results[0].product_name);
-    console.log("Quantity: ".red + results[0].stock_quantity);
-  });
+      console.log("Item ID: ".red + itemNo[0].item_id);
+      console.log("Department: ".red + itemNo[0].department_name);
+      console.log("Price: ".red + results[0].price);
+      console.log("Product Name: ".red + results[0].product_name);
+      console.log("Quantity: ".red + results[0].stock_quantity);
+    }
+  );
 }
